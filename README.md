@@ -1,4 +1,44 @@
-This project reproduces a problem with trinidad_resque_extension.  Here's what happens
+This project reproduces a problem with trinidad_resque_extension.  
+
+Here's how I created this:
+
+	$ rails new blog
+	$ cd blog
+	$ edit Gemfile
+	
+Add these lines:
+
+	gem "trinidad", "1.3.1"
+	gem "trinidad_jars", "1.0.2"
+	gem "trinidad_resque_extension", "0.1.0"
+
+Back to the console
+
+	$ touch config/trinidad.yml
+	$ edit config/trinidad.yml
+	
+Add this:
+
+	extensions:
+	  resque:
+		queues: critical, normal, low
+		count:  1
+		path: 'lib/workers'
+		redis_host: 'localhost:6379'
+
+Open another console, and start redis:
+
+	$ redis-server
+	
+Back to the first console and run bundler:
+
+	$ bundle install
+
+Now for the problem:
+
+## The Problem
+
+Here's what happens
 with the code in this branch:
 
 	$ rails s trinidad
